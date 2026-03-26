@@ -50,4 +50,5 @@
 
 .ios_dark_gray { background: #3a3a3c; color: white; }
 .ios_light_gray { background: #8e8e93; color: black; }
-.ios_accent { background: var(--t-yellow); color: black; font-size: 1.8rem; }
+.ios_accent { background: var(--t-yellow); color: rgb(0, 0, 0); font-size: 1.8rem; }
+#calc_equal{background: var(--t-yellow); color: rgb(255, 0, 0); font-size: 1.8rem;}

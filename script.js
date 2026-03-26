@@ -43,8 +43,7 @@ window.onload = function() {
         if (selectedOperation) b = strVal; else a = strVal;
     }
 
-    // КОНВЕРТАЦИЯ
-    const rates = { rub: 1, usd: 90, eur: 100 };
+    const rates = { rub: 1, usd: 81, eur: 93 };
     const symbols = { rub: '₽', usd: '$', eur: '€' };
     const colors = {
         rub: { color: '#ffdd2d', shadow: 'rgba(255, 221, 45, 0.2)' },

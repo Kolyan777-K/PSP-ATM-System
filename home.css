@@ -3,7 +3,7 @@
   --feature-1-img: url('https://avatars.mds.yandex.net/i?id=bdf8c2323891151abf5cce2cd3fbb915_l-10090172-images-thumbs&n=13');
   --feature-2-img: url('https://img.freepik.com/premium-photo/safe-box-money-with-coins-banknote-cash-3d-illustration-style_175994-12903.jpg');
 }
-body.light_theme {
+body .light_theme {
   --hero-img: url('https://media.istockphoto.com/id/1371857165/ru/векторная/шаблон-кредитной-карты.jpg?s=612x612&w=0&k=20&c=atqVNS2-CGTeH0skBDZ3Z1Mt8mIC658QHL5AX8Q3bQA=');
   --feature-1-img: url('https://thumbs.dreamstime.com/b/many-coins-banknotes-different-countries-times-money-background-40449509.jpg');
   --feature-2-img: url('https://thumbs.dreamstime.com/b/стальные-сейф-и-деньги-вокруг-23120302.jpg');
@@ -104,7 +104,7 @@ body.light_theme {
   transform: translateY(-2px);
 }
 
-body.light_theme .github_link_btn {
+body .light_theme .github_link_btn {
   background: var(--t-yellow);
   color: #000;
   border-color: var(--t-yellow);
