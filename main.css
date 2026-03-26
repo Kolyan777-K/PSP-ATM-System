@@ -1,0 +1,87 @@
+:root {
+  --t-yellow: #ffdd2d;
+  --t-dark-bg: #1c1c1e;
+  --t-card-bg: #2c2c2e;
+  --t-text-main: #ffffff;
+  --t-text-muted: #8e8e93;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+  background-color: var(--t-dark-bg);
+  color: var(--t-text-main);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body.light_theme {
+  --t-dark-bg: #f2f2f7;
+  --t-card-bg: #ffffff;
+  --t-text-main: #000000;
+  --t-text-muted: #8e8e93;
+}
+
+.bank_header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 15px 40px; background-color: var(--t-card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.bank_logo {
+  display: flex; align-items: center; gap: 10px; font-weight: 800;
+  font-size: 1.4rem; cursor: pointer; transition: transform 0.2s;
+}
+.bank_logo:hover { transform: scale(1.05); }
+
+.logo_icon { background: var(--t-yellow); color: #000; padding: 4px 12px; border-radius: 4px; }
+.bank_nav { display: flex; gap: 15px; }
+
+.nav_btn {
+  background: transparent; border: none; color: var(--t-text-muted);
+  font-size: 1.1rem; font-weight: 600; cursor: pointer; padding: 5px 10px; transition: 0.2s;
+}
+.nav_btn:hover { color: var(--t-text-main); }
+.nav_btn.active { color: var(--t-text-main); border-bottom: 3px solid var(--t-yellow); }
+
+.sys_btn {
+  background: transparent;
+  color: var(--t-text-main);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sys_btn:hover {
+  background: var(--t-yellow);
+  color: #000;
+  border-color: var(--t-yellow);
+  box-shadow: 0 0 15px rgba(255, 221, 45, 0.3);
+}
+
+body.light_theme .sys_btn {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+body.light_theme .sys_btn:hover {
+  border-color: var(--t-yellow);
+}
+
+.main_content { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
+
+.atm_footer_signature {
+  text-align: center; padding: 20px; color: var(--t-text-muted);
+  font-size: 0.9rem; background: var(--t-card-bg);
+}
+
+.tab_section { display: none; width: 100%; max-width: 600px; }
+.tab_section.active { display: block; animation: fadeIn 0.4s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

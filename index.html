@@ -2,93 +2,172 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Банкомат-Калькулятор - Васильев Н.Д.</title>
-  <link rel="stylesheet" href="atm-style.css">
-  <script src="script.js" defer></script>
+  <title>V ATM System - Васильев Н.Д.</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="terminal.css">
+  <link rel="stylesheet" href="goal.css">
 </head>
-<body id="atm_environment">
+<body id="atm_environment" class="dark_theme">
 
-  <div class="atm_header_info">
-    <details class="atm_author_details">
-      <summary>Информация о разработчике</summary>
-      <p>Автор: Васильев Николай Денисович</p>
-      <p>Группа: ИУ5-42Б</p>
-    </details>
-
-    <div class="atm_lab_goal">
-      <p>Цель ЛР: <mark>знакомство</mark> с <mark>HTML</mark>, <mark>CSS</mark> и <mark>JavaScript</mark> на примере калькулятора-банкомата.</p>
+  <header class="bank_header">
+    <div class="bank_logo" id="logo_home">
+      <span class="logo_icon">V</span>
+      <span class="logo_text">ATM</span>
     </div>
 
-    <select class="atm_currency_dropdown" id="currency_selector">
-      <option value="rub">Операции в: Рублях (₽)</option>
-      <option value="usd">Операции в: Долларах ($)</option>
-      <option value="eur">Операции в: Евро (€)</option>
-    </select>
+    <nav class="bank_nav">
+      <button class="nav_btn active" data-target="tab_home">Главная</button>
+      <button class="nav_btn" data-target="tab_atm">Терминал</button>
+      <button class="nav_btn" data-target="tab_goal">Цель ЛР</button>
+    </nav>
 
-<div class="atm_top_controls">
-      <button id="trigger_theme" class="atm_system_btn">Сменить тему</button>
-
-      <button id="trigger_screen_color" class="atm_system_btn">Цвет экрана</button>
-
-      <a href="https://github.com/Kolyan777-K/PSP-ATM-System.git" target="_blank" class="atm_system_btn atm_link_btn">Мой GitHub</a>
+    <div class="header_controls">
+      <button id="trigger_theme" class="sys_btn">Сменить тему</button>
     </div>
+  </header>
 
-  <div class="atm_main_terminal">
-    <div id="atm_monitor" class="atm_monitor_screen">
-      <span id="result">0</span> <span id="currency_symbol">₽</span>
-    </div>
+  <main class="main_content">
 
-    <div class="atm_control_panel">
-
-      <div class="atm_key_row">
-        <button id="calc_m_plus" class="atm_key atm_mem_key">M+</button>
-        <button id="calc_m_minus" class="atm_key atm_mem_key">M-</button>
-        <button id="calc_sq" class="atm_key atm_adv_key">x²</button>
-        <button id="calc_sqrt" class="atm_key atm_adv_key">√</button>
-        <button id="calc_fact" class="atm_key atm_adv_key">x!</button>
+    <section id="tab_home" class="tab_section active full_width">
+      <div class="hero_banner">
+        <div class="hero_text">
+          <h1>Финансы нового поколения</h1>
+          <p>Инновационный терминал V ATM для управления капиталом. Мгновенная конвертация, сложная инженерия и абсолютная безопасность.</p>
+          <button class="action_link_btn" onclick="document.querySelector('[data-target=\'tab_atm\']').click()">Перейти в терминал</button>
+        </div>
+        <div class="hero_img"></div>
       </div>
 
-      <div class="atm_key_row">
-        <button id="calc_clear" class="atm_key atm_secondary_key">C</button>
-        <button id="calc_backspace" class="atm_key atm_secondary_key">⌫</button>
-        <button id="calc_sign" class="atm_key atm_secondary_key">+/-</button>
-        <button id="calc_percent" class="atm_key atm_secondary_key">%</button>
-        <button id="calc_div" class="atm_key atm_primary_key">/</button>
+      <div class="features_grid">
+        <div class="feature_card">
+          <div class="feature_img feature_img_1"></div>
+          <h3>Мультивалютность</h3>
+          <p>Счета в рублях, долларах и евро с моментальной конвертацией по рыночному курсу.</p>
+        </div>
+        <div class="feature_card">
+          <div class="feature_img feature_img_2"></div>
+          <h3>Надежность систем</h3>
+          <p>Авторская разработка студента ИУ5-42Б Васильева Николая. Защита на высшем уровне.</p>
+        </div>
       </div>
+      <div class="author_info_block">
+        <details class="author_details">
+          <summary>Информация о разработчике</summary>
+          <div class="details_content">
+            <p><strong>Разработчик:</strong> Васильев Николай Денисович</p>
+            <p><strong>Группа:</strong> ИУ5-42Б</p>
+          </div>
+        </details>
 
-      <div class="atm_key_row">
-        <button id="btn_digit_7" class="atm_key atm_num_key">7</button>
-        <button id="btn_digit_8" class="atm_key atm_num_key">8</button>
-        <button id="btn_digit_9" class="atm_key atm_num_key">9</button>
-        <button id="calc_commission" class="atm_key atm_com_key">-3%</button>
-        <button id="calc_mult" class="atm_key atm_primary_key">x</button>
+        <a href="https://github.com/Kolyan777-K/PSP-ATM-System" target="_blank" class="github_link_btn">
+          🔗 Мой GitHub
+        </a>
       </div>
+    </section>
 
-      <div class="atm_key_row">
-        <button id="btn_digit_4" class="atm_key atm_num_key">4</button>
-        <button id="btn_digit_5" class="atm_key atm_num_key">5</button>
-        <button id="btn_digit_6" class="atm_key atm_num_key">6</button>
-        <button id="calc_minus" class="atm_key atm_primary_key">-</button>
-      </div>
+    <section id="tab_atm" class="tab_section full_width">
+      <div class="terminal_layout">
 
-      <div class="atm_key_row">
-        <button id="btn_digit_1" class="atm_key atm_num_key">1</button>
-        <button id="btn_digit_2" class="atm_key atm_num_key">2</button>
-        <button id="btn_digit_3" class="atm_key atm_num_key">3</button>
-        <button id="calc_plus" class="atm_key atm_primary_key">+</button>
-      </div>
+        <div class="terminal_info">
+          <h2>Панель управления</h2>
+          <p>Используйте встроенный инженерный калькулятор для точных расчетов перед проведением банковских операций.</p>
 
-      <div class="atm_key_row">
-        <button id="btn_digit_0" class="atm_key atm_num_key">0</button>
-        <button id="btn_digit_000" class="atm_key atm_num_key">000</button>
-        <button id="btn_digit_dot" class="atm_key atm_num_key">.</button>
-        <button id="calc_equal" class="atm_key atm_execute_key">=</button>
+          <div class="atm_settings">
+            <label>Валюта счета:</label>
+            <select class="atm_currency_dropdown" id="currency_selector">
+              <option value="rub">Рубли (₽)</option>
+              <option value="usd">Доллары ($)</option>
+              <option value="eur">Евро (€)</option>
+            </select>
+          </div>
+
+          <div id="conv_buttons" class="conv_buttons_row"></div>
+        </div>
+
+        <div class="atm_main_terminal">
+          <div id="atm_monitor" class="atm_monitor_screen">
+            <div class="screen_top">
+              <span id="memory_indicator">M</span>
+              <span id="calc_history"></span>
+            </div>
+            <div class="screen_main">
+              <span id="result">0</span><span id="currency_symbol" class="currency_sm">₽</span>
+            </div>
+          </div>
+
+          <div class="atm_control_panel">
+            <div class="atm_key_row">
+              <button id="calc_m_plus" class="atm_key ios_dark_gray">M+</button>
+              <button id="calc_m_minus" class="atm_key ios_dark_gray">M-</button>
+              <button id="calc_m_recall" class="atm_key ios_dark_gray">MR</button>
+              <button id="calc_m_clear" class="atm_key ios_dark_gray">MC</button>
+            </div>
+
+            <div class="atm_key_row">
+              <button id="calc_sq" class="atm_key ios_dark_gray">x²</button>
+              <button id="calc_sqrt" class="atm_key ios_dark_gray">√</button>
+              <button id="calc_fact" class="atm_key ios_dark_gray">x!</button>
+              <button id="calc_backspace" class="atm_key ios_dark_gray">⌫</button>
+            </div>
+
+            <div class="atm_key_row">
+              <button id="calc_clear" class="atm_key ios_light_gray">C</button>
+              <button id="calc_sign" class="atm_key ios_light_gray">+/-</button>
+              <button id="calc_percent" class="atm_key ios_light_gray">%</button>
+              <button id="calc_div" class="atm_key ios_accent">÷</button>
+            </div>
+
+            <div class="atm_key_row">
+              <button id="btn_digit_7" class="atm_key ios_dark_gray">7</button>
+              <button id="btn_digit_8" class="atm_key ios_dark_gray">8</button>
+              <button id="btn_digit_9" class="atm_key ios_dark_gray">9</button>
+              <button id="calc_mult" class="atm_key ios_accent">×</button>
+            </div>
+
+            <div class="atm_key_row">
+              <button id="btn_digit_4" class="atm_key ios_dark_gray">4</button>
+              <button id="btn_digit_5" class="atm_key ios_dark_gray">5</button>
+              <button id="btn_digit_6" class="atm_key ios_dark_gray">6</button>
+              <button id="calc_minus" class="atm_key ios_accent">-</button>
+            </div>
+
+            <div class="atm_key_row">
+              <button id="btn_digit_1" class="atm_key ios_dark_gray">1</button>
+              <button id="btn_digit_2" class="atm_key ios_dark_gray">2</button>
+              <button id="btn_digit_3" class="atm_key ios_dark_gray">3</button>
+              <button id="calc_plus" class="atm_key ios_accent">+</button>
+            </div>
+
+            <div class="atm_key_row">
+              <button id="btn_digit_0" class="atm_key ios_dark_gray">0</button>
+              <button id="btn_digit_000" class="atm_key ios_dark_gray">000</button>
+              <button id="btn_digit_dot" class="atm_key ios_dark_gray">,</button>
+              <button id="calc_equal" class="atm_key ios_accent">=</button>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
-  </div>
+    </section>
+
+    <section id="tab_goal" class="tab_section full_width">
+      <div class="goal_layout">
+        <div class="goal_card">
+          <h2>Цели лабораторной работы</h2>
+          <div class="atm_lab_goal">
+            <p><strong>Лабораторная работа 1:</strong> <mark>знакомство</mark> с инструментами <mark>HTML</mark> и <mark>CSS</mark>. Разработка отзывчивого интерфейса и модульной сетки.</p>
+            <p><strong>Лабораторная работа 2:</strong> программирование логики на <mark>JavaScript</mark>. Обработка событий, математические алгоритмы и защита от некорректного ввода.</p>
+          </div>
+        </div>
+        <div class="goal_image"></div>
+      </div>
+    </section>
+
+  </main>
 
   <footer class="atm_footer_signature">
-    ЛР выполнил Васильев Николай Денисович ИУ5-42Б
+    &copy; 2026 V ATM System | ЛР выполнил Васильев Николай Денисович ИУ5-42Б
   </footer>
 
 </body>
