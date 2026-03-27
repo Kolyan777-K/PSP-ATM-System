@@ -1,4 +1,4 @@
-window.onload = function() {
+    window.onload = function() {
     const navButtons = document.querySelectorAll('.nav_btn');
     const tabSections = document.querySelectorAll('.tab_section');
 
@@ -24,8 +24,16 @@ window.onload = function() {
     const symbolEl = document.getElementById('currency_symbol');
     const screenEl = document.getElementById('atm_monitor');
 
+    let displayHex = false; // Флаг для 16-ричной системы
+
     function updateScreen() {
-        let formatVal = (val) => val.toString().length > 9 ? val.toString().substring(0, 9) : val;
+        let formatVal = (val) => {
+            if (displayHex) {
+                let num = Math.trunc(Number(val));
+                return isNaN(num) ? '0' : num.toString(16).toUpperCase();
+            }
+            return val.toString().length > 9 ? val.toString().substring(0, 9) : val;
+        };
 
         if (selectedOperation) {
             historyElement.innerText = `${formatVal(a)} ${selectedOperation}`;
@@ -35,6 +43,16 @@ window.onload = function() {
             outputElement.innerText = a === '' ? '0' : formatVal(a);
         }
     }
+
+    document.getElementById("btn_hex").onclick = () => {
+        if (getActiveVar() !== '') {
+            displayHex = true;
+            isFinished = true;
+            selectedOperation = null;
+
+            updateScreen();
+        }
+    };
 
     function getActiveVar() { return selectedOperation ? b : a; }
     function setActiveVar(val) {
@@ -80,6 +98,8 @@ window.onload = function() {
 
     document.querySelectorAll('[id^="btn_digit_"]').forEach(btn => {
         btn.onclick = () => {
+            displayHex = false;
+
             let digit = btn.innerText === ',' ? '.' : btn.innerText;
 
             if (isFinished && !selectedOperation) { a = ''; isFinished = false; }
@@ -154,4 +174,31 @@ window.onload = function() {
 
         a = res.toString(); b = ''; selectedOperation = null; isFinished = true; updateScreen();
     };
+
+    document.addEventListener('keydown', (e) => {
+        let btnId = null;
+        const key = e.key;
+
+        if (key >= '0' && key <= '9') btnId = `btn_digit_${key}`;
+        else if (key === '.' || key === ',') btnId = 'btn_digit_dot';
+        else if (key === '+') btnId = 'calc_plus';
+        else if (key === '-') btnId = 'calc_minus';
+        else if (key === '*' || key === '*  ') btnId = 'calc_mult';
+        else if (key === '/') btnId = 'calc_div';
+        else if (key === 'Enter' || key === '=') btnId = 'calc_equal';
+        else if (key === 'Backspace') btnId = 'calc_backspace';
+        else if (key === 'Escape') btnId = 'calc_clear';
+
+        if (btnId) {
+            e.preventDefault();
+            const btn = document.getElementById(btnId);
+            if (btn) {
+                displayHex = false;
+                btn.click();
+
+                btn.classList.add('kb_active');
+                setTimeout(() => btn.classList.remove('kb_active'), 150);
+            }
+        }
+    });
 }
