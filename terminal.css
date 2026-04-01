@@ -44,10 +44,38 @@
 
 .atm_key {
   width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 1.4rem;
-  font-weight: 500; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.1s;
+  font-weight: 500; cursor: pointer; display: flex; justify-content: center; align-items: center;
+  transition: background-color 0.3s ease, transform 0.1s;
+  outline: none; -webkit-tap-highlight-color: transparent;
+}
+
+.atm_key:active { transform: scale(0.9); transition: background-color 0s; }
+
+.ios_dark_gray { background: #333333; color: white; }
+.ios_dark_gray:hover, .ios_dark_gray.kb_active { background: #555555; }
+.ios_dark_gray:active { background: #737373; }
+
+.ios_light_gray { background: #a5a5a5; color: black; }
+.ios_light_gray:hover, .ios_light_gray.kb_active { background: #d4d4d2; }
+.ios_light_gray:active { background: #ffffff; }
+
+.ios_accent { background: var(--t-yellow); color: black; font-size: 1.8rem; }
+.ios_accent:hover, .ios_accent.kb_active { background: #ffea75; }
+.ios_accent:active { background: #ffffff; }
+
+.hex_btn {
+  border-color: var(--t-yellow);
+  color: var(--t-yellow);
+  transition: all 0.3s ease;
+}
+
+.hex_btn:hover {
+  background: var(--t-yellow);
+  color: #000;
+  box-shadow: 0 0 15px rgba(255, 221, 45, 0.4);
 }
 .atm_key:active { transform: scale(0.9); filter: brightness(130%); }
 
 .ios_dark_gray { background: #3a3a3c; color: white; }
 .ios_light_gray { background: #8e8e93; color: black; }
-.ios_accent { background: var(--t-yellow); color: black; font-size: 1.8rem; }
+.ios_accent { background: var(--t-yellow); color: rgb(0, 0, 0); font-size: 1.8rem; }
