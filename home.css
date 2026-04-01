@@ -40,6 +40,7 @@ body .light_theme {
   width: 100%; height: 180px; background-size: cover; background-position: center;
   border-radius: 12px; margin-bottom: 15px; transition: background-image 0.3s ease;
 }
+
 .feature_img_1 { background-image: var(--feature-1-img); }
 .feature_img_2 { background-image: var(--feature-2-img); }
 .feature_card h3 { color: var(--t-text-main); margin-top: 0; }

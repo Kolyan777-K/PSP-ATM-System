@@ -79,6 +79,7 @@ body.light_theme .sys_btn:hover {
 }
 
 .tab_section { display: none; width: 100%; max-width: 600px; }
+
 .tab_section.active { display: block; animation: fadeIn 0.4s ease; }
 
 @keyframes fadeIn {

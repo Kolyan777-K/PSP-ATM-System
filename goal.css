@@ -10,6 +10,7 @@ mark { background: rgba(255, 221, 45, 0.2); color: var(--t-yellow); padding: 4px
 :root { --goal-img: url('https://static.tildacdn.com/tild3837-3539-4138-b163-313634623666/76800.webp  '); }
 body.light_theme { --goal-img: url('https://avatars.mds.yandex.net/i?id=3b859f3775e17de3516dbcb41920a14e_l-10303547-images-thumbs&n=13'); }
 
+
 .goal_image {
   flex: 1; background-image: var(--goal-img); background-size: cover; background-position: center;
   border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: background-image 0.3s ease;

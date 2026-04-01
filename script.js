@@ -177,6 +177,7 @@
 
     document.addEventListener('keydown', (e) => {
         let btnId = null;
+
         const key = e.key;
 
         if (key >= '0' && key <= '9') btnId = `btn_digit_${key}`;
