@@ -40,7 +40,7 @@ export class DetailPage {
                     <div class="terminal_layout">
                         <div class="terminal_info">
                             <h2>Операция выдачи: ${this.data.title}</h2>
-                            <p style="margin-bottom: 25px;">Подтвердите сумму. Данные в банковском хранилище будут обновлены автоматически.</p>
+                            <p style="margin-bottom: 25px;">Подтвердите сумму. Данные в банковском хранилище будут обновлены локально (Режим Лабы 3).</p>
 
                             <div style="background: var(--t-dark-bg); padding: 20px; border-radius: 12px; margin-bottom: 30px; border-left: 4px solid var(--t-yellow);">
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
@@ -98,8 +98,8 @@ export class DetailPage {
         };
     }
 
-    async calculateDispense(e) {
-        if (e) e.preventDefault(); // Защита от перезагрузки страницы
+    calculateDispense(e) {
+        if (e) e.preventDefault();
 
         const input = document.getElementById('withdraw-amount');
         const resultDiv = document.getElementById('algo-result');
@@ -112,142 +112,28 @@ export class DetailPage {
         resultDiv.style.display = 'none';
         errorMsg.style.display = 'none';
 
+        // ПРОВЕРКИ
         if (!targetAmount || targetAmount <= 0) {
             errorMsg.innerText = "⚠️ Введите сумму больше нуля.";
             errorMsg.style.display = 'block';
             return;
         }
         if (targetAmount % minNote !== 0) {
-            errorMsg.innerText = `⚠️ Сумма должна быть кратна ${minNote} ${this.data.symbol}.`;
+            errorMsg.innerText = `⚠️ Сумма должна быть кратна ${minNote} ${this.data.symbol}. В кассете нет купюр меньше этого номинала.`;
+            errorMsg.style.display = 'block';
+            return;
+        }
+        if (targetAmount > this.data.reserve) {
+            errorMsg.innerText = "⚠️ Недостаточно средств в хранилище банкомата.";
             errorMsg.style.display = 'block';
             return;
         }
 
-        try {
-            const response = await fetch(`http://localhost:3000/api/currencies/${this.data.id}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount: targetAmount })
-            });
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                errorMsg.innerText = `⚠️ ${result.error}`;
-                errorMsg.style.display = 'block';
-                return;
-            }
-
-            // ОБНОВЛЯЕМ ДАННЫЕ БЕЗ ПЕРЕРИСОВКИ ВСЕЙ СТРАНИЦЫ
-            this.data.reserve = result.reserve;
-            reserveDisplay.innerText = `${this.data.reserve} ${this.data.symbol}`;
-
-            const notes = this.denominations[this.data.currency];
-            let dispensed = {};
-            let currentNoteIndex = 0;
-            let remaining = targetAmount;
-
-            while (remaining > 0 && currentNoteIndex < notes.length) {
-                let note = notes[currentNoteIndex];
-                if (remaining >= note) {
-                    if (!dispensed[note]) dispensed[note] = 0;
-                    dispensed[note]++;
-                    remaining -= note;
-                } else {
-                    currentNoteIndex++;
-                }
-            }
-
-            let receiptHTML = `<div class="receipt_header">Транзакция выполнена</div>`;
-            for (let note in dispensed) {
-                receiptHTML += `
-                    <div class="receipt_row">
-                        <span>Купюра ${note} ${this.data.symbol}</span>
-                        <span>${dispensed[note]} шт.</span>
-                    </div>
-                `;
-            }
-            receiptHTML += `
-                <div class="receipt_total">
-                    <span>ВЫДАНО:</span>
-                    <span>${targetAmount} ${this.data.symbol}</span>
-                </div>
-            `;
-
-            resultDiv.innerHTML = receiptHTML;
-            resultDiv.style.display = 'block';
-
-        } catch (err) {
-            errorMsg.innerText = "⚠️ Ошибка связи с сервером. Проверьте backend.";
-            errorMsg.style.display = 'block';
-        }
-    }
-
-// В методе render исправляем привязку
-render() {
-    this.parent.innerHTML = this.getHTML();
-    const header = new HeaderComponent(document.getElementById('header-container'));
-    header.render(true, this.onBack);
-
-    this.setupInputControls();
-
-    const calcBtn = document.getElementById('calc-btn');
-
-    // Самый надежный способ привязки в JS
-    calcBtn.onclick = async (e) => {
-        console.log("Кнопка нажата, запускаю расчет..."); // Увидишь это в F12
-        await this.calculateDispense(e);
-    };
-}
-
-async calculateDispense(e) {
-    if (e) e.preventDefault();
-
-    const input = document.getElementById('withdraw-amount');
-    const resultDiv = document.getElementById('algo-result');
-    const errorMsg = document.getElementById('error-msg');
-    const reserveDisplay = document.getElementById('reserve-display');
-
-    let targetAmount = parseInt(input.value);
-    const minNote = this.getMinDenomination();
-
-    resultDiv.style.display = 'none';
-    errorMsg.style.display = 'none';
-
-    // ПРОВЕРКА 1: Пустое поле или ноль
-    if (!targetAmount || targetAmount <= 0) {
-        errorMsg.innerText = "⚠️ Введите сумму больше нуля.";
-        errorMsg.style.display = 'block';
-        return;
-    }
-
-    // ПРОВЕРКА 2: Кратность (самое важное)
-    if (targetAmount % minNote !== 0) {
-        errorMsg.innerText = `⚠️ Сумма должна быть кратна ${minNote} ${this.data.symbol}. В кассете нет купюр меньше этого номинала.`;
-        errorMsg.style.display = 'block';
-        return;
-    }
-
-    try {
-        // Если проверки прошли, отправляем запрос на сервер
-        const response = await fetch(`http://localhost:3000/api/currencies/${this.data.id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount: targetAmount })
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            errorMsg.innerText = `⚠️ ${result.error}`;
-            errorMsg.style.display = 'block';
-            return;
-        }
-
-        // Обновляем баланс и рисуем чек (код из прошлого шага...)
-        this.data.reserve = result.reserve;
+        // Обновляем данные локально (БЕЗ СЕРВЕРА)
+        this.data.reserve -= targetAmount;
         reserveDisplay.innerText = `${this.data.reserve} ${this.data.symbol}`;
 
+        // Жадный алгоритм выдачи купюр
         const notes = this.denominations[this.data.currency];
         let dispensed = {};
         let currentNoteIndex = 0;
@@ -264,6 +150,7 @@ async calculateDispense(e) {
             }
         }
 
+        // Отрисовка чека
         let receiptHTML = `<div class="receipt_header">Транзакция выполнена</div>`;
         for (let note in dispensed) {
             receiptHTML += `<div class="receipt_row"><span>Купюра ${note} ${this.data.symbol}</span><span>${dispensed[note]} шт.</span></div>`;
@@ -272,10 +159,16 @@ async calculateDispense(e) {
 
         resultDiv.innerHTML = receiptHTML;
         resultDiv.style.display = 'block';
-
-    } catch (err) {
-        errorMsg.innerText = "⚠️ Ошибка сервера. Проверь бэкенд.";
-        errorMsg.style.display = 'block';
     }
-}
+
+    render() {
+        this.parent.innerHTML = this.getHTML();
+        const header = new HeaderComponent(document.getElementById('header-container'));
+        header.render(true, this.onBack);
+
+        this.setupInputControls();
+
+        const calcBtn = document.getElementById('calc-btn');
+        calcBtn.onclick = (e) => this.calculateDispense(e);
+    }
 }
