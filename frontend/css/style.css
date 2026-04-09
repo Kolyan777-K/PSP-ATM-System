@@ -1,0 +1,147 @@
+:root {
+  --t-yellow: #ffdd2d;
+  --t-dark-bg: #1c1c1e;
+  --t-card-bg: #2c2c2e;
+  --t-text-main: #ffffff;
+  --t-text-muted: #8e8e93;
+}
+
+body.light_theme {
+  --t-dark-bg: #f4f5f7;
+  --t-card-bg: #ffffff;
+  --t-text-main: #111111;
+  --t-text-muted: #666666;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+  background-color: var(--t-dark-bg);
+  color: var(--t-text-main);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.full_width { max-width: 1100px; margin: 0 auto; width: 100%; padding: 0 20px; }
+
+/* УБИРАЕМ СТРЕЛОЧКИ ИЗ INPUT NUMBER */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* --- ХЕДЕР --- */
+.bank_header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background-color: var(--t-card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.bank_logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.4rem; }
+.logo_icon { background: var(--t-yellow); color: #000; padding: 4px 12px; border-radius: 4px; }
+
+.sys_btn { background: transparent; color: var(--t-text-main); border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+.sys_btn:hover { background: var(--t-yellow); color: #000; border-color: var(--t-yellow); box-shadow: 0 0 15px rgba(255, 221, 45, 0.3); }
+
+body.light_theme .sys_btn { border-color: rgba(0, 0, 0, 0.2); }
+body.light_theme .sys_btn:hover { border-color: var(--t-yellow); background: var(--t-yellow); color: #000;}
+
+.main_content { flex-grow: 1; padding: 40px 0; }
+
+/* --- ГЛАВНЫЙ БАННЕР --- */
+.hero_intro { display: flex; gap: 40px; align-items: center; background: var(--t-card-bg); padding: 40px; border-radius: 24px; margin-bottom: 50px; border: 1px solid rgba(255,221,45, 0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+.hero_intro_text { flex: 1; }
+.hero_intro_text h1 { color: var(--t-yellow); font-size: 2.5rem; margin: 0 0 20px 0; }
+.hero_intro_text p { color: var(--t-text-muted); font-size: 1.15rem; line-height: 1.7; margin-bottom: 15px; }
+.hero_intro_img { width: 400px; height: 300px; object-fit: cover; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+
+/* --- СЕТКА КАРТОЧЕК --- */
+.currency_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.currency_card {
+    background: var(--t-card-bg);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 221, 45, 0.05);
+
+    /* МЫ ТУТ: делаем карточку флекс-контейнером */
+    display: flex;
+    flex-direction: column;
+}
+
+.currency_card:hover { border-color: var(--t-yellow); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(255, 221, 45, 0.2); }
+.currency_card img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; }
+.currency_card h3 { color: var(--t-text-main); margin: 0 0 10px 0; font-size: 1.5rem; }
+
+/* ТЕКСТ ОПИСАНИЯ: обрезаем и фиксируем высоту */
+.currency_desc {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--t-text-muted);
+    margin-bottom: 25px;
+
+    /* УБРАЛИ ОБРЕЗКУ: теперь текст будет виден полностью */
+    display: block;
+    overflow: visible;
+
+    /* ОСТАВИЛИ ВЫРАВНИВАНИЕ: это толкает кнопку вниз */
+    flex-grow: 1;
+}
+
+.action_link_btn {
+    background: var(--t-yellow);
+    color: #000;
+    padding: 15px 20px;
+    border: none;
+    width: 100%;
+    font-size: 1.05rem;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+
+    /* Кнопка всегда внизу благодаря flex-grow у текста выше */
+    margin-top: auto;
+}
+
+.action_link_btn:hover { filter: brightness(110%); transform: translateY(-2px); }
+
+/* --- ИНФО О РАЗРАБОТЧИКЕ --- */
+.author_info_block { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(150,150,150,0.1); }
+.author_details { flex: 1; background: var(--t-card-bg); padding: 15px 20px; border-radius: 12px; border-left: 4px solid var(--t-yellow); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+.author_details summary { font-weight: bold; font-size: 1.1rem; color: var(--t-yellow); outline: none; cursor: pointer; }
+.details_content { margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(150, 150, 150, 0.1); }
+.details_content p { margin: 5px 0; color: var(--t-text-main); font-size: 0.95rem; }
+
+.github_link_btn { background: transparent; color: var(--t-yellow); padding: 12px 25px; border: 2px solid var(--t-yellow); font-size: 1.05rem; font-weight: bold; border-radius: 12px; text-decoration: none; transition: all 0.3s ease; display: flex; align-items: center; height: fit-content; }
+.github_link_btn:hover { background: var(--t-yellow); color: #000; box-shadow: 0 5px 15px rgba(255, 221, 45, 0.3); transform: translateY(-2px); }
+
+/* --- ФУТЕР --- */
+.atm_footer_signature { text-align: center; padding: 20px; color: var(--t-text-muted); font-size: 0.9rem; background: var(--t-card-bg); margin-top: auto; border-top: 1px solid rgba(150,150,150,0.1); }
+
+/* --- ДЕТАЛЬНАЯ СТРАНИЦА (ТЕРМИНАЛ) --- */
+.detail_hero_img { width: 100%; height: 350px; object-fit: cover; border-radius: 24px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid rgba(150,150,150,0.1); }
+.terminal_layout { display: flex; gap: 40px; align-items: flex-start; justify-content: space-between; }
+.terminal_info { flex: 1; background: var(--t-card-bg); padding: 40px; border-radius: 24px; border: 1px solid rgba(255,221,45, 0.2); }
+.terminal_info h2 { color: var(--t-yellow); font-size: 2.2rem; margin-top: 0; }
+.terminal_info p { color: var(--t-text-muted); line-height: 1.6; font-size: 1.1rem; margin-bottom: 20px; }
+
+.input_wrapper { display: flex; align-items: center; background: var(--t-dark-bg); border: 1px solid var(--t-yellow); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+.input_wrapper input { flex: 1; background: transparent; border: none; color: var(--t-text-main); font-size: 1.3rem; font-weight: bold; padding: 15px; text-align: center; outline: none; }
+.input_btn { background: rgba(255,221,45, 0.1); color: var(--t-yellow); border: none; padding: 0 25px; font-size: 1.8rem; cursor: pointer; transition: 0.2s; align-self: stretch; display: flex; align-items: center; justify-content: center; }
+.input_btn:hover { background: var(--t-yellow); color: #000; }
+
+.error_msg { color: #ff3b30; font-size: 1rem; margin-bottom: 20px; display: none; background: rgba(255, 59, 48, 0.1); padding: 15px; border-radius: 12px; border: 1px solid rgba(255, 59, 48, 0.3); font-weight: 500; }
+.receipt_box { background: var(--t-dark-bg); border: 1px solid rgba(150, 150, 150, 0.2); border-radius: 16px; padding: 25px; margin-top: 25px; display: none; }
+.receipt_header { text-align: center; color: var(--t-text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; border-bottom: 1px solid rgba(150,150,150,0.2); padding-bottom: 15px; }
+.receipt_row { display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--t-text-main); font-size: 1.1rem; }
+.receipt_row span:last-child { font-weight: bold; color: var(--t-yellow); }
+.receipt_total { border-top: 1px dashed rgba(150,150,150,0.3); margin-top: 15px; padding-top: 15px; display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: bold; color: var(--t-text-main); }
