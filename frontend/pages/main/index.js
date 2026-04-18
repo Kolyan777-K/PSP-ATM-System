@@ -101,7 +101,7 @@ export class MainPage {
             symbol: "₣",
             title: "Швейцарские франки",
             reserve: 50000,
-            desc: "Тестовая валюта, добавленная через клиентский POST запрос (Лаба 5).",
+            desc: "Тестовая валюта, добавленная через клиентский POST запрос",
             src: "https://cdn-icons-png.flaticon.com/512/330/330431.png"
         };
 
