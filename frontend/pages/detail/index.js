@@ -1,4 +1,6 @@
 import { HeaderComponent } from '../../components/header/index.js';
+import { ajax } from '../../modules/ajax.js';
+import { currencyUrls } from '../../modules/currencyUrls.js';
 
 export class DetailPage {
     constructor(parent, currencyData, onBack) {
@@ -11,17 +13,18 @@ export class DetailPage {
             "USD": [100, 50, 20, 10],
             "EUR": [500, 200, 100, 50, 20, 10],
             "CNY": [100, 50, 20, 10],
-            "GBP": [50, 20, 10, 5]
+            "GBP": [50, 20, 10, 5],
+            "CHF": [1000, 200, 100, 50, 20, 10] // На случай, если добавишь франки
         };
     }
 
     getMinDenomination() {
-        const notes = this.denominations[this.data.currency];
+        const notes = this.denominations[this.data.currency] || [10]; // fallback
         return notes[notes.length - 1];
     }
 
     renderDenominationTags() {
-        const notes = this.denominations[this.data.currency];
+        const notes = this.denominations[this.data.currency] || [];
         return notes.map(note =>
             `<span style="background: rgba(255,221,45,0.1); color: var(--t-yellow); padding: 5px 12px; border-radius: 6px; font-weight: bold; border: 1px solid rgba(255,221,45,0.3); font-size: 0.9rem;">${note}</span>`
         ).join(' ');
@@ -40,7 +43,7 @@ export class DetailPage {
                     <div class="terminal_layout">
                         <div class="terminal_info">
                             <h2>Операция выдачи: ${this.data.title}</h2>
-                            <p style="margin-bottom: 25px;">Подтвердите сумму. Данные в банковском хранилище будут обновлены локально (Режим Лабы 3).</p>
+                            <p style="margin-bottom: 25px; color: #4ade80;">Внимание: Выдача синхронизируется с реальным сервером по сети (AJAX).</p>
 
                             <div style="background: var(--t-dark-bg); padding: 20px; border-radius: 12px; margin-bottom: 30px; border-left: 4px solid var(--t-yellow);">
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
@@ -112,14 +115,14 @@ export class DetailPage {
         resultDiv.style.display = 'none';
         errorMsg.style.display = 'none';
 
-        // ПРОВЕРКИ
+        // Локальные проверки перед отправкой на сервер
         if (!targetAmount || targetAmount <= 0) {
             errorMsg.innerText = "⚠️ Введите сумму больше нуля.";
             errorMsg.style.display = 'block';
             return;
         }
         if (targetAmount % minNote !== 0) {
-            errorMsg.innerText = `⚠️ Сумма должна быть кратна ${minNote} ${this.data.symbol}. В кассете нет купюр меньше этого номинала.`;
+            errorMsg.innerText = `⚠️ Сумма должна быть кратна ${minNote} ${this.data.symbol}.`;
             errorMsg.style.display = 'block';
             return;
         }
@@ -129,36 +132,57 @@ export class DetailPage {
             return;
         }
 
-        // Обновляем данные локально (БЕЗ СЕРВЕРА)
-        this.data.reserve -= targetAmount;
-        reserveDisplay.innerText = `${this.data.reserve} ${this.data.symbol}`;
+        // БЛОКИРУЕМ КНОПКУ, ПОКА ИДЕТ ЗАПРОС
+        const calcBtn = document.getElementById('calc-btn');
+        calcBtn.innerText = "Обработка транзакции...";
+        calcBtn.disabled = true;
 
-        // Жадный алгоритм выдачи купюр
-        const notes = this.denominations[this.data.currency];
-        let dispensed = {};
-        let currentNoteIndex = 0;
-        let remaining = targetAmount;
+        // Отправляем PATCH запрос на сервер (Списание денег)
+        const updatePayload = {
+            amount: targetAmount
+        };
 
-        while (remaining > 0 && currentNoteIndex < notes.length) {
-            let note = notes[currentNoteIndex];
-            if (remaining >= note) {
-                if (!dispensed[note]) dispensed[note] = 0;
-                dispensed[note]++;
-                remaining -= note;
+        ajax.patch(currencyUrls.updateCurrency(this.data.id), updatePayload, (data, status) => {
+            // Возвращаем кнопку в исходное состояние
+            calcBtn.innerText = "Подтвердить и выдать";
+            calcBtn.disabled = false;
+
+            if (status === 200) {
+                // Сервер успешно списал средства (в базе данных). Обновляем UI
+                this.data.reserve -= targetAmount;
+                reserveDisplay.innerText = `${this.data.reserve} ${this.data.symbol}`;
+
+                // Жадный алгоритм выдачи купюр
+                const notes = this.denominations[this.data.currency] || [10];
+                let dispensed = {};
+                let currentNoteIndex = 0;
+                let remaining = targetAmount;
+
+                while (remaining > 0 && currentNoteIndex < notes.length) {
+                    let note = notes[currentNoteIndex];
+                    if (remaining >= note) {
+                        if (!dispensed[note]) dispensed[note] = 0;
+                        dispensed[note]++;
+                        remaining -= note;
+                    } else {
+                        currentNoteIndex++;
+                    }
+                }
+
+                // Отрисовка чека
+                let receiptHTML = `<div class="receipt_header">Транзакция выполнена по API</div>`;
+                for (let note in dispensed) {
+                    receiptHTML += `<div class="receipt_row"><span>Купюра ${note} ${this.data.symbol}</span><span>${dispensed[note]} шт.</span></div>`;
+                }
+                receiptHTML += `<div class="receipt_total"><span>ВЫДАНО:</span><span>${targetAmount} ${this.data.symbol}</span></div>`;
+
+                resultDiv.innerHTML = receiptHTML;
+                resultDiv.style.display = 'block';
             } else {
-                currentNoteIndex++;
+                errorMsg.innerText = `⚠️ Ошибка сервера (Статус: ${status}). Транзакция отклонена.`;
+                errorMsg.style.display = 'block';
             }
-        }
-
-        // Отрисовка чека
-        let receiptHTML = `<div class="receipt_header">Транзакция выполнена</div>`;
-        for (let note in dispensed) {
-            receiptHTML += `<div class="receipt_row"><span>Купюра ${note} ${this.data.symbol}</span><span>${dispensed[note]} шт.</span></div>`;
-        }
-        receiptHTML += `<div class="receipt_total"><span>ВЫДАНО:</span><span>${targetAmount} ${this.data.symbol}</span></div>`;
-
-        resultDiv.innerHTML = receiptHTML;
-        resultDiv.style.display = 'block';
+        });
     }
 
     render() {
