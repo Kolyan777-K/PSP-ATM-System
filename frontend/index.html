@@ -1,24 +1,41 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V ATM | Dashboard</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="icon" href="data:,">
-
-    <script type="importmap">
-        {
-          "imports": {
-            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-            "three/examples/jsm/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-          }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <title>V ATM System - Васильев Н.Д.</title>
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/home.css">
+  <link rel="stylesheet" href="./css/terminal.css">
+  <link rel="stylesheet" href="./css/goal.css">
 </head>
-<body data-theme="dark">
-    <div id="root"></div>
+<body id="atm_environment" class="dark_theme">
 
-    <script type="module" src="./js/main.js"></script>
+  <header class="bank_header">
+    <div class="bank_logo" id="logo_home">
+      <span class="logo_icon">V</span><span class="logo_text">ATM</span>
+    </div>
+    <nav class="bank_nav">
+      <button class="nav_btn active" data-target="tab_home">Главная</button>
+      <button class="nav_btn" data-target="tab_atm">Терминал</button>
+    </nav>
+  </header>
+
+  <main class="main_content">
+    <section id="tab_home" class="tab_section active full_width">
+      <div class="hero_banner">
+        <div class="hero_text">
+          <h1>Финансы нового поколения</h1>
+          <p>Инновационный терминал V ATM для управления капиталом.</p>
+        </div>
+      </div>
+
+      <div class="cards_section" style="margin-top: 30px;">
+          <h2 style="color: var(--t-text-main); margin-bottom: 20px;">Загруженные кассеты (XHR)</h2>
+          <div id="currencies_grid" class="currencies_grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./js/main.js"></script>
 </body>
 </html>
