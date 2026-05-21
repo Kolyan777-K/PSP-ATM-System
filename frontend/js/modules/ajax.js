@@ -7,6 +7,7 @@ class Ajax {
             if (xhr.readyState === 4) this._handleResponse(xhr, callback);
         };
     }
+
     post(url, data, callback) {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', url);
@@ -16,6 +17,18 @@ class Ajax {
             if (xhr.readyState === 4) this._handleResponse(xhr, callback);
         };
     }
+
+    // ВОТ ТОТ САМЫЙ МЕТОД, КОТОРОГО НЕ ХВАТАЛО ДЛЯ РЕДАКТИРОВАНИЯ И СНЯТИЯ ДЕНЕГ
+    patch(url, data, callback) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('PATCH', url);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(data));
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) this._handleResponse(xhr, callback);
+        };
+    }
+
     delete(url, callback) {
         const xhr = new XMLHttpRequest();
         xhr.open('DELETE', url);
@@ -24,6 +37,7 @@ class Ajax {
             if (xhr.readyState === 4) this._handleResponse(xhr, callback);
         };
     }
+
     _handleResponse(xhr, callback) {
         try {
             const data = xhr.responseText ? JSON.parse(xhr.responseText) : null;
@@ -33,4 +47,5 @@ class Ajax {
         }
     }
 }
+
 export const ajax = new Ajax();

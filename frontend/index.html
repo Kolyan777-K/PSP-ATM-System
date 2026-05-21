@@ -51,15 +51,11 @@
             <strong id="atm_available" style="font-size: 1.3rem; color: #fff;">-</strong>
           </div>
           <div style="color: var(--t-text-muted); margin-bottom: 12px; font-size: 0.9rem;">Номиналы в кассете:</div>
-          <div style="display: flex; gap: 10px;">
-             <span style="border: 1px solid var(--t-yellow); color: var(--t-yellow); padding: 4px 15px; border-radius: 8px; font-weight: bold;">100</span>
-             <span style="border: 1px solid var(--t-yellow); color: var(--t-yellow); padding: 4px 15px; border-radius: 8px; font-weight: bold;">50</span>
-             <span style="border: 1px solid var(--t-yellow); color: var(--t-yellow); padding: 4px 15px; border-radius: 8px; font-weight: bold;">20</span>
-             <span style="border: 1px solid var(--t-yellow); color: var(--t-yellow); padding: 4px 15px; border-radius: 8px; font-weight: bold;">10</span>
-          </div>
+
+          <div id="atm_denominations" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
         </div>
 
-        <label style="color: var(--t-text-muted); display: block; margin-bottom: 10px; font-size: 0.9rem;">Укажите сумму (кратно 10):</label>
+        <label id="atm_amount_label" style="color: var(--t-text-muted); display: block; margin-bottom: 10px; font-size: 0.9rem;">Укажите сумму:</label>
         <div style="display: flex; background: var(--t-dark-bg); border: 1px solid var(--t-yellow); border-radius: 12px; overflow: hidden; margin-bottom: 20px;">
           <button id="btn_minus" style="background: rgba(255,221,45, 0.1); color: var(--t-yellow); border: none; padding: 15px 30px; font-size: 1.5rem; cursor: pointer;">−</button>
           <input type="number" id="atm_amount_input" value="100" style="flex: 1; background: transparent; border: none; color: white; text-align: center; font-size: 1.3rem; font-weight: bold; outline: none;" readonly>
@@ -70,12 +66,7 @@
 
         <div class="error_msg" id="atm_error" style="display:none; color: #ff3b30; background: rgba(255,59,48,0.1); padding: 15px; border-radius: 12px; margin-top: 20px; font-weight: bold; border-left: 4px solid #ff3b30;"></div>
 
-        <div class="receipt_box" id="atm_receipt" style="display:none; margin-top: 25px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 20px;">
-            <div class="receipt_header" style="text-align: center; color: var(--t-text-muted); margin-bottom: 15px;">V ATM TRANSACTION RECEIPT</div>
-            <div class="receipt_row" style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Валюта:</span><span id="rec_currency" style="color:#fff;">-</span></div>
-            <div class="receipt_row" style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Выдано купюр:</span><span id="rec_amount" style="color:#fff;">-</span></div>
-            <div class="receipt_total" style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:bold; color:var(--t-yellow); margin-top:15px;"><span>Итог:</span><span id="rec_total">-</span></div>
-        </div>
+        <div class="receipt_box" id="atm_receipt" style="display:none; margin-top: 25px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 20px;"></div>
       </div>
     </section>
   </main>
@@ -83,7 +74,6 @@
   <div id="crud_modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center;">
     <div style="background: var(--t-card-bg); padding: 30px; border-radius: 16px; width: 420px; border: 1px solid var(--t-yellow); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
       <h3 id="modal_title" style="color: var(--t-yellow); margin-top: 0; font-size: 1.4rem;">Управление кассетой</h3>
-
       <div id="modal_error" style="display: none; color: #ff3b30; background: rgba(255,59,48,0.1); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-weight: 500; font-size: 0.9rem;"></div>
 
       <form id="crud_form">
@@ -100,6 +90,18 @@
           <button type="button" id="btn_close_modal" style="flex: 1; background: #333; color: #fff; padding: 12px; border: none; border-radius: 8px; cursor: pointer;">Отмена</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <div id="confirm_modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: var(--t-card-bg); padding: 30px; border-radius: 16px; width: 350px; border: 1px solid #ff3b30; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center;">
+      <h3 style="color: #ff3b30; margin-top: 0; font-size: 1.4rem;">Внимание!</h3>
+      <p style="color: var(--t-text-main); margin-bottom: 25px;">Точно изъять кассету? Это действие нельзя отменить.</p>
+
+      <div style="display: flex; gap: 10px;">
+        <button id="btn_confirm_delete" style="flex: 1; background: #ff3b30; color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Удалить</button>
+        <button id="btn_cancel_delete" style="flex: 1; background: #333; color: #fff; padding: 12px; border: none; border-radius: 8px; cursor: pointer;">Отмена</button>
+      </div>
     </div>
   </div>
 
