@@ -1,22 +1,26 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const cors = require('cors');
+const cors = require('cors'); // Для 6 лабы он уже особо не нужен, но пусть будет
 
-// 1. Импортируем наш новый роутер
 const currenciesRouter = require('./routes/currencies');
 
 const app = express();
 const PORT = 3000;
+
+// === ВОТ ЭТА САМАЯ ГЛАВНАЯ СТРОЧКА ДЛЯ 6 ЛАБЫ ===
+// Она берет собранный фронтенд из папки public и раздает его как статику!
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use(cors());
 app.use(express.json());
 
 const DATA_PATH = path.join(__dirname, 'data', 'currencies.json');
 
-// 2. Подключаем роутер для POST-запроса
-// (он перехватит все POST-запросы, идущие на /api/currencies)
 app.use('/api/currencies', currenciesRouter);
+
+// ... дальше твои старые app.get, app.patch и т.д.
+// ... дальше идут app.get, app.patch и т.д.
 
 app.get('/api/currencies', (req, res) => {
     const { title, currency, reserve_min, reserve_max } = req.query;
@@ -71,7 +75,7 @@ app.get('/api/currencies/:id', (req, res) => {
 
 app.patch('/api/currencies/:id', (req, res) => {
     const id = parseInt(req.params.id);
-    const { amount } = req.body;
+    const body = req.body;
 
     fs.readFile(DATA_PATH, 'utf8', (err, data) => {
         if (err) return res.status(500).json({ error: "Ошибка чтения" });
@@ -80,16 +84,23 @@ app.patch('/api/currencies/:id', (req, res) => {
         const index = currencies.findIndex(c => c.id === id);
 
         if (index !== -1) {
-            if (currencies[index].reserve >= amount) {
-                currencies[index].reserve -= amount;
-
-                fs.writeFile(DATA_PATH, JSON.stringify(currencies, null, 2), (err) => {
-                    if (err) return res.status(500).json({ error: "Ошибка записи" });
-                    res.json(currencies[index]);
-                });
-            } else {
-                res.status(400).json({ error: "Недостаточно средств в резерве" });
+            // Если пришел запрос на выдачу купюр (есть поле amount)
+            if (body.amount !== undefined) {
+                if (currencies[index].reserve >= body.amount) {
+                    currencies[index].reserve -= body.amount;
+                } else {
+                    return res.status(400).json({ error: "Недостаточно средств в резерве" });
+                }
             }
+            // Если пришел запрос на редактирование из модалки (обновляем все поля)
+            else {
+                currencies[index] = { ...currencies[index], ...body };
+            }
+
+            fs.writeFile(DATA_PATH, JSON.stringify(currencies, null, 2), (err) => {
+                if (err) return res.status(500).json({ error: "Ошибка записи" });
+                res.json(currencies[index]);
+            });
         } else {
             res.status(404).json({ error: "Валюта не найдена" });
         }
