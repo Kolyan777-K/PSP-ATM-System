@@ -95,6 +95,7 @@ body.light_theme .sys_btn:hover { border-color: var(--t-yellow); background: var
     /* ОСТАВИЛИ ВЫРАВНИВАНИЕ: это толкает кнопку вниз */
     flex-grow: 1;
 }
+/* ЛР5 */
 
 .action_link_btn {
     background: var(--t-yellow);
